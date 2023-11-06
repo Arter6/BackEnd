@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web-server:
+    depends_on:
+      - db
+    build: server/
+    ports:
+      - 8000:80
+    restart: always
+    volumes:
+      - ./server:/var/www/html
+    
+  db:
+    container_name: db
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - ./db/init.sql:/var/www/sql/init.sql
+    command: --init-file /var/www/sql/init.sql
+    environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: appDB
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+    ports:
+        - "8001:80"

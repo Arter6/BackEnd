@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web-server:
+    depends_on:
+      - db
+    build: server/
+    ports:
+      - 8000:80
+    restart: always
+    volumes:
+      - ./server:/var/www/html
+    links:
+      - db
+    
+  db:
+    container_name: db
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - ./db/init.sql:/var/www/sql/init.sql
+    command: --init-file /var/www/sql/init.sql
+    environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: appDB
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+    ports:
+        - "8001:80"
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8002:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: password
+      PMA_USER: user
+      PMA_PASSWORD: password
+
+volumes:
+  my-db:
