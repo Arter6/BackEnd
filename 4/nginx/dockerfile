@@ -1,5 +1,0 @@
-FROM nginx:latest
-ADD ./nginx.conf /etc/nginx/conf.d/site.conf
-RUN rm /etc/nginx/nginx.conf
-EXPOSE 80
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
